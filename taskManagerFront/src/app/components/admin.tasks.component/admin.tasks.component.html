@@ -1,0 +1,136 @@
+<div class="min-vh-100 bg-dark text-light p-5" style="background:  radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 35%),
+    #212529;">
+  <div class="container">
+    <h2 class="mb-4">Panel de administración</h2>
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <!-- FORMULARIO -->
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <h5 class="card-title text-dark">
+          {{ editingTaskId() ? 'Editar tarea' : 'Crear nueva tarea' }}
+        </h5>
+
+        <form (ngSubmit)="saveTask()">
+          <!-- TÍTULO -->
+          <div class="mb-3">
+            <label class="form-label text-dark">Título</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="formTask.title"
+              name="title"
+              required
+            />
+            @if (titleError()) {
+              <small class="text-danger">{{ titleError() }}</small>
+            }
+          </div>
+
+          <!-- DESCRIPCIÓN -->
+          <div class="mb-3">
+            <label class="form-label text-dark">Descripción</label>
+            <textarea
+              class="form-control"
+              [(ngModel)]="formTask.description"
+              name="description"
+              required
+            ></textarea>
+            @if (descriptionError()) {
+              <small class="text-danger">{{ descriptionError() }}</small>
+            }
+          </div>
+
+          <!-- ESTADO -->
+          <div class="mb-3">
+            <label class="form-label text-dark">Estado</label>
+            <select class="form-select" [(ngModel)]="formTask.status" name="status">
+              <option value="PENDING">Pendiente</option>
+              <option value="IN_PROGRESS">En progreso</option>
+              <option value="COMPLETED">Completada</option>
+            </select>
+
+            @if (statusError()) {
+              <small class="text-danger">{{ statusError() }}</small>
+            }
+          </div>
+
+          <!-- USUARIO -->
+          <div class="mb-3">
+            <label class="form-label text-dark">Usuario asignado</label>
+            <select class="form-select" name="assignedUser" [(ngModel)]="formTask.assignedUserId">
+              @for (user of users(); track user.id) {
+                <option [ngValue]="user.id">
+                  {{ user.email }}
+                </option>
+              }
+            </select>
+            @if (assignedUserError()) {
+              <small class="text-danger">{{ assignedUserError() }}</small>
+            }
+          </div>
+
+          <!-- BOTONES -->
+          <button class="btn btn-primary-custom me-2" type="submit">
+            {{ editingTaskId() ? 'Guardar cambios' : 'Crear tarea' }}
+          </button>
+
+          @if (editingTaskId()) {
+            <button class="btn btn-secondary" type="button" (click)="resetForm()">Cancelar</button>
+          }
+        </form>
+      </div>
+    </div>
+
+    <!-- ESTADOS -->
+    @if (loading()) {
+      <p>Cargando tareas...</p>
+    } @else if (tasks().length === 0) {
+      <p>No hay tareas creadas.</p>
+    } @else {
+      <!-- LISTADO -->
+      <div class="row g-3">
+        @for (task of tasks(); track task.id) {
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow h-100">
+              <div class="card-body text-dark">
+                <h5 class="card-title">{{ task.title }}</h5>
+
+                <p class="card-text">
+                  {{ task.description }}
+                </p>
+
+                <p>
+                  <strong>Estado: </strong>
+                  <span class="badge bg-info text-dark">
+                    {{ getStatusText(task.status) }}
+                  </span>
+                </p>
+
+                <p>
+                  <strong>Asignada a: </strong>
+                  {{ task.assignedUser.name }}
+                  ({{ task.assignedUser.email }})
+                </p>
+
+                <!-- BOTONES -->
+                <div class="d-flex gap-2">
+                  <button class="btn btn-warning btn-sm" (click)="editTask(task)">Editar</button>
+
+                  <button class="btn btn-danger btn-sm" (click)="deleteTask(task.id)">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

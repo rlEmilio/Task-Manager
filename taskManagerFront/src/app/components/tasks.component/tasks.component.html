@@ -1,0 +1,87 @@
+<div class="bg-dark text-white min-vh-100 pt-5" style="background:  radial-gradient(circle at top,rgba(255,255,255,0.08), transparent 35%),
+    #212529;">
+  <div class="container">
+    <h2 class="mb-4">Mis tareas</h2>
+
+    @if (loading()) {
+      <div class="alert alert-info">
+        Cargando tareas...
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (!loading() && tasks().length === 0) {
+      <div class="alert alert-secondary">
+        No tienes tareas asignadas.
+      </div>
+    }
+
+    @if (tasks().length > 0) {
+      <div class="row g-3">
+        @for (task of tasks(); track task.id) {
+          <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+              <div class="card-body d-flex flex-column">
+
+                <h5 class="card-title">{{ task.title }}</h5>
+
+                <p class="card-text text-muted">
+                  {{ task.description }}
+                </p>
+
+                <p>
+                  <strong>Estado:</strong>
+                  <span
+                    class="ms-2 badge"
+                    [ngClass]="{
+                      'bg-secondary': task.status === 'PENDING',
+                      'bg-warning text-dark': task.status === 'IN_PROGRESS',
+                      'bg-success': task.status === 'COMPLETED'
+                    }"
+                  >
+                    {{
+                      task.status === 'PENDING'
+                        ? 'Pendiente'
+                        : task.status === 'IN_PROGRESS'
+                        ? 'En progreso'
+                        : 'Completada'
+                    }}
+                  </span>
+                </p>
+
+                <div class="mt-auto d-flex gap-2 flex-wrap">
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="updateStatus(task.id, 'PENDING')"
+                  >
+                    Pendiente
+                  </button>
+
+                  <button
+                    class="btn btn-outline-warning btn-sm"
+                    (click)="updateStatus(task.id, 'IN_PROGRESS')"
+                  >
+                    En progreso
+                  </button>
+
+                  <button
+                    class="btn btn-outline-success btn-sm"
+                    (click)="updateStatus(task.id, 'COMPLETED')"
+                  >
+                    Completada
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

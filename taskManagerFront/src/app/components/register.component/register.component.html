@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-center align-items-center global-height bg-dark">
+  <div class="card shadow p-4" style="width: 100%; max-width: 420px; transform: translateY(-40px)">
+    <h2 class="text-center mb-4">Formulario registro</h2>
+
+    <button
+      routerLink="/"
+      class="btn btn-sm btn-outline-secondary position-absolute top-0 start-0 m-2"
+    >
+      ←
+    </button>
+
+    <form (ngSubmit)="register()" class="d-flex flex-column gap-3">
+      <div class="d-flex flex-column">
+        <label for="name" class="form-label">Nombre:</label>
+        <input id="name" type="text" name="name" [(ngModel)]="name" class="form-control" />
+        @if (nameError()) {
+          <small class="text-danger">{{ nameError() }}</small>
+        }
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="email" class="form-label">Email:</label>
+        <input id="email" type="text" name="email" [(ngModel)]="email" class="form-control" />
+        @if (emailError()) {
+          <small class="text-danger">{{ emailError() }}</small>
+        }
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="password" class="form-label">Contraseña:</label>
+
+        <div class="input-group">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            name="password"
+            [(ngModel)]="password"
+            class="form-control"
+          />
+
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="togglePassword()">
+            <i class="bi" [ngClass]="showPassword() ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+
+        @if (passwordError()) {
+          <small class="text-danger">{{ passwordError() }}</small>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mt-3">Registro</button>
+      @if (errorMessage()) {
+        <div class="alert alert-danger mt-3">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <p class="mt-2 text-center">
+        ¿Ya estás registrado?
+        <a routerLink="/login" style="cursor: pointer" class="ms-1">Login</a>
+      </p>
+    </form>
+  </div>
+</div>

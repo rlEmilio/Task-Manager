@@ -1,0 +1,24 @@
+.HomeImage {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.HomeImage img {
+  width: 80%;
+  max-width: 90vw;
+  height: auto;
+  animation: spin-right 50s linear infinite;
+
+}
+
+@keyframes spin-right {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+

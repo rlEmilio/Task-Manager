@@ -1,0 +1,9 @@
+.btn-primary-custom {
+  background: linear-gradient(135deg, #1f6feb, #7c3aed);
+  border: none;
+  color: white;
+}
+
+.btn-primary-custom:hover {
+  opacity: 0.9;
+}
